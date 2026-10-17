@@ -204,13 +204,17 @@
 
     async function refresh() {
       try {
-        const res = await fetch("/api/status", { cache: "no-store" });
+        const res = await fetch("api.php", { cache: "no-store" });
         render((await res.json()).ready);
       } catch {}
     }
 
     async function login(pw) {
-      const res = await fetch("/api/login", { method: "POST", headers: { Authorization: "Bearer " + pw } });
+      const res = await fetch("api.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "login", password: pw }),
+      });
       if (!res.ok) return false;
       setPassword(pw);
       document.body.classList.add("admin-on");
@@ -234,10 +238,10 @@
     toggle.addEventListener("change", async () => {
       const ready = toggle.checked;
       render(ready);
-      const res = await fetch("/api/status", {
+      const res = await fetch("api.php", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: "Bearer " + getPassword() },
-        body: JSON.stringify({ ready }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ready, password: getPassword() }),
       });
       if (res.status === 401) {
         setPassword(null);

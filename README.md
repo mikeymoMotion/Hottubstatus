@@ -2,30 +2,37 @@
 
 A dead-simple page that shows **READY** (warm gradient + steam) or **NOT READY** (cool gradient), big and centered.
 
-## Run it
+It's plain HTML plus one small PHP file, so it runs on any regular web host (Bluehost, etc.). No database and nothing to install.
 
-```sh
-ADMIN_PASSWORD=pick-something npm start
-```
+## Put it on Bluehost
 
-Then open http://localhost:3000. No dependencies — just Node 18+.
+1. Log in to Bluehost → **Websites** → your site → **cPanel** → **File Manager**.
+2. Open `public_html` (or make a subfolder like `public_html/hottub` if you want it at `yoursite.com/hottub`).
+3. Upload the three files from this repo's `public/` folder:
+   - `index.html`
+   - `api.php`
+   - `config.example.php`
+4. In File Manager, rename `config.example.php` to **`config.php`**, then edit it and change `change-me` to your own password. Save.
+5. Visit your site. The page starts as **NOT READY**.
 
 ## Changing the status
 
 1. Click the faint 🔒 in the bottom-right corner.
-2. Enter your `ADMIN_PASSWORD`.
-3. A **Ready** switch appears — flip it.
+2. Enter your password.
+3. A **Ready** switch appears. Flip it.
 
-Your browser remembers the password, so next time the switch is just there. Everyone else only sees the status (it refreshes every 15 seconds). The server rejects changes without the password.
+Your browser remembers the password, so next time the switch is already there. Everyone else only sees the status (open pages refresh every 15 seconds). The server rejects changes without the password.
 
-## Config
+The status is saved to `status.json` next to `api.php`. PHP creates the file the first time you flip the switch.
 
-| Env var          | Default              | What it does                  |
-| ---------------- | -------------------- | ----------------------------- |
-| `ADMIN_PASSWORD` | *(none — required)*  | Password to change the status |
-| `PORT`           | `3000`               | Port to listen on             |
-| `DATA_FILE`      | `data/status.json`   | Where the status is saved     |
+## Troubleshooting
 
-## Hosting
+- **Switch flips back / "could not save status":** the folder isn't writable by PHP. In File Manager, set the folder's permissions to `755`.
+- **Password never works:** make sure the file is named exactly `config.php` and the password isn't still `change-me` (that one is always rejected).
 
-Any host that runs a Node app works (Render, Railway, Fly.io, a Raspberry Pi). Set `ADMIN_PASSWORD` in the host's environment settings and use `npm start` as the start command. If the host has an ephemeral disk, point `DATA_FILE` at a persistent volume, or the status resets to "Not Ready" on redeploy.
+## Try it locally
+
+```sh
+cp public/config.example.php public/config.php   # then edit the password
+php -S localhost:8000 -t public
+```
