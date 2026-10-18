@@ -9,9 +9,11 @@ The whole site is one file: [`public/index.php`](public/index.php). It runs on a
 1. In Bluehost, open your site's **File Manager** and go to its **Document Root** folder (shown on the site's settings page).
 2. Delete anything already in that folder (e.g. an `index.php` or `default.html`).
 3. Upload `index.php`, or create a new file named `index.php` and paste in its contents.
-4. Edit `index.php` and change line 3 to your password, keeping the quotes:
+4. Edit `index.php` and replace `change-me` on line 4 with your password. No quotes needed, and any characters are fine:
    ```php
-   $ADMIN_PASSWORD = 'your-password-here';
+   $ADMIN_PASSWORD = <<<'PASSWORD'
+   your-password-here
+   PASSWORD;
    ```
 5. Visit your site. It starts as **NOT READY**.
 
@@ -28,8 +30,8 @@ The status is saved to `status.json` next to `index.php`. PHP creates it the fir
 ## Troubleshooting
 
 - **Switch flips back after reload:** the folder isn't writable by PHP. In File Manager, set the folder's permissions to `755`.
-- **Password never works:** make sure you changed line 3 and it isn't still `change-me` (that one is always rejected).
-- **Blank page:** the file was only partly copied. Paste the whole thing again.
+- **Password never works:** make sure you replaced line 4 and it isn't still `change-me` (that one is always rejected).
+- **Blank page:** the file was only partly copied, or lines 3–5 were changed. Re-upload the file and only replace `change-me` on line 4.
 
 ## Try it locally
 

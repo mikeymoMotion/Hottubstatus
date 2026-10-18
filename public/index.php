@@ -1,7 +1,10 @@
 <?php
-// ===== Set your admin password here (keep the quotes) =====
-$ADMIN_PASSWORD = 'change-me';
-// ==========================================================
+// ===== Put your admin password on the line below (no quotes needed) =====
+$ADMIN_PASSWORD = <<<'PASSWORD'
+change-me
+PASSWORD;
+// =========================================================================
+$ADMIN_PASSWORD = trim($ADMIN_PASSWORD);
 
 // The rest of this file is the page itself. Requests to ?api are the status API:
 //   GET  ?api                                  -> { ready, updatedAt }
