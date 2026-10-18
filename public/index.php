@@ -1,3 +1,56 @@
+<?php
+// ===== Set your admin password here (keep the quotes) =====
+$ADMIN_PASSWORD = 'change-me';
+// ==========================================================
+
+// The rest of this file is the page itself. Requests to ?api are the status API:
+//   GET  ?api                                  -> { ready, updatedAt }
+//   POST ?api  { password, action: "login" }   -> check admin password
+//   POST ?api  { password, ready: true|false } -> set status
+
+$dataFile = __DIR__ . '/status.json';
+
+if (isset($_GET['api'])) {
+    header('Content-Type: application/json');
+    header('Cache-Control: no-store');
+
+    function respond($code, $body) {
+        http_response_code($code);
+        echo json_encode($body);
+        exit;
+    }
+
+    function loadStatus($dataFile) {
+        $status = @json_decode(@file_get_contents($dataFile), true);
+        return is_array($status) ? $status : ['ready' => false, 'updatedAt' => gmdate('c')];
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        respond(200, loadStatus($dataFile));
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        respond(405, ['error' => 'method not allowed']);
+    }
+
+    $body = json_decode(file_get_contents('php://input'), true) ?: [];
+    $given = (string)($body['password'] ?? '');
+
+    if ($ADMIN_PASSWORD === '' || $ADMIN_PASSWORD === 'change-me' || !hash_equals($ADMIN_PASSWORD, $given)) {
+        respond(401, ['error' => 'unauthorized']);
+    }
+
+    if (($body['action'] ?? '') === 'login') {
+        respond(200, ['ok' => true]);
+    }
+
+    $status = ['ready' => !empty($body['ready']), 'updatedAt' => gmdate('c')];
+    if (file_put_contents($dataFile, json_encode($status), LOCK_EX) === false) {
+        respond(500, ['error' => 'could not save status']);
+    }
+    respond(200, $status);
+}
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -204,13 +257,13 @@
 
     async function refresh() {
       try {
-        const res = await fetch("api.php", { cache: "no-store" });
+        const res = await fetch("?api", { cache: "no-store" });
         render((await res.json()).ready);
       } catch {}
     }
 
     async function login(pw) {
-      const res = await fetch("api.php", {
+      const res = await fetch("?api", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: "login", password: pw }),
@@ -238,7 +291,7 @@
     toggle.addEventListener("change", async () => {
       const ready = toggle.checked;
       render(ready);
-      const res = await fetch("api.php", {
+      const res = await fetch("?api", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ready, password: getPassword() }),
