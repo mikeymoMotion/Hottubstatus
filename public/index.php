@@ -90,29 +90,45 @@ if (isset($_GET['api'])) {
     }
     body.ready .steam { opacity: 1; }
 
+    /* Each wisp is a thin, soft streak that sways as it rises, then spreads out and fades. */
     .wisp {
       position: absolute;
-      bottom: -20vh;
-      width: 16vmax;
-      height: 34vmax;
+      bottom: -30vh;
+      width: 5vmax;
+      height: 30vmax;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 70%);
-      filter: blur(18px);
+      background: radial-gradient(ellipse at center, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.15) 45%, rgba(255,255,255,0) 70%);
+      filter: blur(10px);
       opacity: 0;
-      animation: rise 12s ease-in infinite;
+      animation: rise-a 6s ease-in infinite;
     }
-    .wisp:nth-child(1) { left: 5%;  animation-delay: 0s;   animation-duration: 13s; }
-    .wisp:nth-child(2) { left: 22%; animation-delay: 3s;   animation-duration: 11s; }
-    .wisp:nth-child(3) { left: 40%; animation-delay: 6s;   animation-duration: 14s; }
-    .wisp:nth-child(4) { left: 58%; animation-delay: 1.5s; animation-duration: 12s; }
-    .wisp:nth-child(5) { left: 74%; animation-delay: 4.5s; animation-duration: 13s; }
-    .wisp:nth-child(6) { left: 88%; animation-delay: 8s;   animation-duration: 11s; }
+    .wisp:nth-child(even) { animation-name: rise-b; }
+    .wisp:nth-child(1)  { left: 4%;  animation-duration: 6s;   animation-delay: 0s; }
+    .wisp:nth-child(2)  { left: 12%; animation-duration: 5.2s; animation-delay: -2.1s; }
+    .wisp:nth-child(3)  { left: 21%; animation-duration: 6.6s; animation-delay: -4s; }
+    .wisp:nth-child(4)  { left: 29%; animation-duration: 5.5s; animation-delay: -1s; }
+    .wisp:nth-child(5)  { left: 38%; animation-duration: 6.2s; animation-delay: -3.3s; }
+    .wisp:nth-child(6)  { left: 46%; animation-duration: 5s;   animation-delay: -0.5s; }
+    .wisp:nth-child(7)  { left: 55%; animation-duration: 6.8s; animation-delay: -5.2s; }
+    .wisp:nth-child(8)  { left: 63%; animation-duration: 5.4s; animation-delay: -2.7s; }
+    .wisp:nth-child(9)  { left: 72%; animation-duration: 6.1s; animation-delay: -1.6s; }
+    .wisp:nth-child(10) { left: 80%; animation-duration: 5.7s; animation-delay: -4.4s; }
+    .wisp:nth-child(11) { left: 88%; animation-duration: 6.4s; animation-delay: -0.9s; }
+    .wisp:nth-child(12) { left: 95%; animation-duration: 5.3s; animation-delay: -3.7s; }
 
-    @keyframes rise {
-      0%   { transform: translate(0, 0) scale(0.6); opacity: 0; }
-      15%  { opacity: 0.7; }
-      50%  { transform: translate(3vw, -50vh) scale(1.1); opacity: 0.4; }
-      100% { transform: translate(-2vw, -100vh) scale(1.6); opacity: 0; }
+    @keyframes rise-a {
+      0%   { transform: translate(0, 0) rotate(0deg) scale(0.5, 0.7); opacity: 0; }
+      15%  { opacity: 0.6; }
+      35%  { transform: translate(2.5vw, -35vh) rotate(6deg) scale(0.8, 1); }
+      60%  { transform: translate(-1.5vw, -65vh) rotate(-5deg) scale(1.3, 1.1); opacity: 0.35; }
+      100% { transform: translate(3vw, -105vh) rotate(8deg) scale(2.2, 1.2); opacity: 0; }
+    }
+    @keyframes rise-b {
+      0%   { transform: translate(0, 0) rotate(0deg) scale(0.5, 0.7); opacity: 0; }
+      15%  { opacity: 0.55; }
+      35%  { transform: translate(-2.5vw, -35vh) rotate(-7deg) scale(0.8, 1); }
+      60%  { transform: translate(2vw, -65vh) rotate(5deg) scale(1.3, 1.1); opacity: 0.3; }
+      100% { transform: translate(-3vw, -105vh) rotate(-8deg) scale(2.2, 1.2); opacity: 0; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -213,6 +229,8 @@ if (isset($_GET['api'])) {
   <div class="bg bg-cool"></div>
   <div class="bg bg-warm"></div>
   <div class="steam" aria-hidden="true">
+    <div class="wisp"></div><div class="wisp"></div><div class="wisp"></div>
+    <div class="wisp"></div><div class="wisp"></div><div class="wisp"></div>
     <div class="wisp"></div><div class="wisp"></div><div class="wisp"></div>
     <div class="wisp"></div><div class="wisp"></div><div class="wisp"></div>
   </div>
