@@ -63,7 +63,7 @@ curl -F photo=@fridge.jpg -F key=YOUR-CAMERA-PASSWORD "https://ismikeshottubread
 - **Password never works:** make sure you replaced line 4 and it isn't still `change-me` (that one is always rejected).
 - **"Add your Anthropic API key" or "API key was rejected":** check line 9 of `index.php` has your whole key, with nothing else on the line.
 - **Count from photo takes a long time:** that's normal; Claude can take up to a minute.
-- **Blank page:** the file was only partly copied, or lines 3–5 were changed. Re-upload the file and only replace the lines this README tells you to.
+- **Blank page:** the file was only partly copied, or something other than the password and key lines was changed. Re-upload the file and only replace the lines this README tells you to.
 
 ## Try it locally
 
