@@ -1,2 +1,5 @@
 public/status.json
 public/fridge.json
+pi/config.ini
+pi/latest.jpg
+pi/state.json
